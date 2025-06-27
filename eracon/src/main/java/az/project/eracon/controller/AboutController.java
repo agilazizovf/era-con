@@ -1,0 +1,67 @@
+package az.project.eracon.controller;
+
+import az.project.eracon.dto.request.AddAboutRequest;
+import az.project.eracon.dto.request.UpdateAboutRequest;
+import az.project.eracon.dto.response.AboutResponse;
+import az.project.eracon.service.AboutService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
+@MyRestController
+@RequestMapping("/api/about")
+@RequiredArgsConstructor
+public class AboutController {
+
+    private final AboutService aboutService;
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<AboutResponse> add(@RequestBody AddAboutRequest request) {
+        return ResponseEntity.ok(aboutService.add(request));
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<AboutResponse> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(aboutService.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AboutResponse>> findAll() {
+        return ResponseEntity.ok(aboutService.findAll());
+    }
+
+    @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<AboutResponse> update(@RequestBody UpdateAboutRequest request) {
+        return ResponseEntity.ok(aboutService.update(request));
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        aboutService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(value = "/upload-multiple/{aboutId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AboutResponse> uploadPictures(@PathVariable Long aboutId,
+                                                        @RequestParam("files") MultipartFile[] files) throws IOException {
+        return ResponseEntity.ok(aboutService.uploadPictures(aboutId, files));
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/delete-picture/{pictureId}")
+    public ResponseEntity<Void> deleteSinglePicture(@PathVariable Long pictureId) {
+        aboutService.deletePicture(pictureId);
+        return ResponseEntity.noContent().build(); // HTTP 204 No Content
+    }
+
+}
