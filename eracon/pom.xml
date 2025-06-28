@@ -142,6 +142,8 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>deabacktemplate</finalName>
 	</build>
+
 
 </project>
