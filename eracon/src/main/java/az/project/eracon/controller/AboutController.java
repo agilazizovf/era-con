@@ -51,14 +51,15 @@ public class AboutController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/upload-multiple/{aboutId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AboutResponse> uploadPictures(@PathVariable Long aboutId,
-                                                        @RequestParam("files") MultipartFile[] files) throws IOException {
-        return ResponseEntity.ok(aboutService.uploadPictures(aboutId, files));
+    @PostMapping(value = "/{id}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public AboutResponse uploadPictures(
+            @PathVariable Long id,
+            @RequestParam("files") List<MultipartFile> files) throws IOException {
+        return aboutService.uploadPictures(id, files.toArray(new MultipartFile[0]));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @DeleteMapping("/delete-picture/{pictureId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteSinglePicture(@PathVariable Long pictureId) {
         aboutService.deletePicture(pictureId);
         return ResponseEntity.noContent().build(); // HTTP 204 No Content

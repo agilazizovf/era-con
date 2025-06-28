@@ -51,7 +51,7 @@ public class FileService {
         String fileNameWithoutExtension = originalFilename.substring(0, originalFilename.lastIndexOf('.'));
         String fileRandomName = originalFilename.replace(fileNameWithoutExtension, randomName);
 
-        Files.copy(stream, Paths.get(fileLocation, fileRandomName), StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(stream, Paths.get(fileLocation + fileRandomName), StandardCopyOption.REPLACE_EXISTING);
 
         FileResponse created = new FileResponse(fileRandomName);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuidName}")
