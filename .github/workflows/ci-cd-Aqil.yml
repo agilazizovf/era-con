@@ -33,6 +33,7 @@ jobs:
 
       - name: Push Docker Image
         run: docker push agilazizovf/eracon
+        working-directory: ./eracon
         
   deploy:
     needs: build-and-test  # Deploy only if the 'build-and-test' job succeeds
