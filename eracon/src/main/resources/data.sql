@@ -1,6 +1,6 @@
 -- Insert into users
 INSERT INTO users (email, password) VALUES
-                                        ('admin1@gmail.com', '$2a$12$RTNq7JGW68FJDTsc3bGxmeyQueGFqAOh5NByss/JyvCglxKYZQ6zi');
+                                        ('admin@gmail.com', '$2a$12$RTNq7JGW68FJDTsc3bGxmeyQueGFqAOh5NByss/JyvCglxKYZQ6zi');
 
 -- Insert roles
 INSERT INTO roles(name, admin)
