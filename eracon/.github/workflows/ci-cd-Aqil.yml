@@ -3,7 +3,7 @@ name: CI/CD Aqil
 on:
   push:
     branches:
-      - Aqil
+      - main
 
 jobs:
   build-and-test:
