@@ -41,6 +41,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/consulting-on-project-works").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/repair-constructions").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/purchases").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
