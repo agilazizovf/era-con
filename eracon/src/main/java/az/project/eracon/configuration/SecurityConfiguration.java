@@ -37,6 +37,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/passwords/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/files/download/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/about").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/license-advices").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/consulting-on-project-works").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/repair-constructions").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/purchases").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
