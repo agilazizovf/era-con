@@ -11,6 +11,14 @@ VALUES
 INSERT INTO user_roles (user_id, role_id)
 select 1,id from roles where admin=1;
 
+insert into abouts(title, description)
+values ('Şirkət haqqında', 'Şirkətimiz 2019-ci ildən öz fəaliyyətinə başlamış ' ||
+                           'bugünə qədər bir çox layihələrə imza atıb. Bizlər bu gün “ERACON” ' ||
+                           'olaraq qarşımıza qoyduğumuz məqsədlərə artıq böyük ölçüdə nail olmuşuq. ' ||
+                           'Hər zaman müştərilərin istək və arzularını həyata keçirmək, eyni zamanda ' ||
+                           'müştəri məmnuniyyətini yüksək tutmaq, yüksək keyfiyyətdə xidmət göstərmək ' ||
+                           'şirkətin əsas prioritetlərindən biridir.');
+
 
 INSERT INTO license_advices (title)
 VALUES ('ERACON olaraq müştərilərimizə lisenziya və icazələrin alınması üzrə məsləhət xidməti həyata keçiririk.');
