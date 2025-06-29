@@ -19,6 +19,11 @@ values ('Şirkət haqqında', 'Şirkətimiz 2019-ci ildən öz fəaliyyətinə b
                            'müştəri məmnuniyyətini yüksək tutmaq, yüksək keyfiyyətdə xidmət göstərmək ' ||
                            'şirkətin əsas prioritetlərindən biridir.');
 
+insert into about_pictures(file_name, about_id)
+values ('file1.png', 1),
+    ('file2.png', 1),
+    ('file3.png', 1);
+
 
 INSERT INTO license_advices (title)
 VALUES ('ERACON olaraq müştərilərimizə lisenziya və icazələrin alınması üzrə məsləhət xidməti həyata keçiririk.');
