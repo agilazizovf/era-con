@@ -24,7 +24,7 @@ public class ProjectController {
     // ✅ Yeni layihə əlavə et
     @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ProjectResponse add(@Valid @RequestBody AddProjectRequest request) {
+    public ProjectResponse add(@RequestBody AddProjectRequest request) {
         return projectService.add(request);
     }
 
@@ -43,7 +43,7 @@ public class ProjectController {
     // ✅ Layihəni yenilə
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ProjectResponse update(@Valid @RequestBody UpdateProjectRequest request) {
+    public ProjectResponse update(@RequestBody UpdateProjectRequest request) {
         return projectService.update(request);
     }
 
