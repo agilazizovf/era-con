@@ -38,38 +38,45 @@ public class FileService {
         }
     }
 
-    public ResponseEntity<FileResponse> uploadFile(MultipartFile file) throws IOException {
-        InputStream stream = file.getInputStream();
-        String originalFilename = file.getOriginalFilename();
-
+    public ResponseEntity<FileResponse> uploadFile(MultipartFile file, String subFolder) throws IOException {
         if (file.getSize() > 30_000_000) {
             throw new CustomException("Faylın ölçüsü çoxdur. Maksimum 30 MB", "File size is too big", "Bad Request", 400, null);
         }
 
-        UUID uuid = UUID.randomUUID();
-        String randomName = uuid.toString();
-        String fileNameWithoutExtension = originalFilename.substring(0, originalFilename.lastIndexOf('.'));
-        String fileRandomName = originalFilename.replace(fileNameWithoutExtension, randomName);
+        // Create dynamic folder inside base path
+        Path fullPath = Paths.get(fileLocation, subFolder);
+        if (!Files.exists(fullPath)) {
+            Files.createDirectories(fullPath);
+        }
 
-        Files.copy(stream, Paths.get(fileLocation + fileRandomName), StandardCopyOption.REPLACE_EXISTING);
+        String originalFilename = file.getOriginalFilename();
+        String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
+        String uuidName = UUID.randomUUID() + extension;
 
-        FileResponse created = new FileResponse(fileRandomName);
+        Path targetPath = fullPath.resolve(uuidName);
+        try (InputStream stream = file.getInputStream()) {
+            Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        FileResponse created = new FileResponse(uuidName);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuidName}")
                 .buildAndExpand(created.getUuidName()).toUri();
 
         return ResponseEntity.created(location).body(created);
     }
 
-    public void deleteFile(String fileName) {
-        Path filePath = Paths.get(fileLocation, fileName);
+
+    public void deleteFile(String fileName, String subFolder) {
+        Path filePath = Paths.get(fileLocation, subFolder, fileName);
         try {
             if (Files.exists(filePath)) {
                 Files.delete(filePath);
             }
         } catch (IOException e) {
-            throw new CustomException("File deletion error", "Unable to delete file", "Bad Request", 400, null);
+            throw new CustomException("Fayl silinmədi", "File deletion failed", "Bad Request", 400, null);
         }
     }
+
 
 
     // ✅ This method fixes the missing getter
