@@ -94,3 +94,51 @@ values (1, '1. Layihələrin araşdırılması (irad və təkliflərin verilməs
        - Tikintiyə təqdim olunmuş cizgilərin ( istehsalat və quraşdırma çizgilərin ) auditi
        - Layihə smeta sənədləri ilə tikinti zamanı tutulan foma2 arayışlarının auditi
        - Tender (açıq və qapalı) və katirovka sorğularının SMF (Satınalma müraciət forması) və TTF (Texniki tələbnamə forması) əsasən auditi');
+
+
+insert into purchases(title)
+values ('Satınalma prosesi müddətində sənədlərin hazırlanması və sistemə işlənməsi.');
+
+insert into purchase_descriptions(purchase_id, descriptions)
+values (1, 'This is description1');
+
+INSERT INTO projects (
+    location,
+    title,
+    area,
+    start_date,
+    end_date,
+    main_image
+) VALUES (
+             'Ramana Qəsəbəsi',
+             'Ramana - 2 mərtəbəli fərdi yaşayış evinin tikintisi',
+             350,
+             '2022-07-16',
+             NULL,
+             'main_image_1.jpg'
+         ),
+         (
+             'ŞUŞA 110/35/10 KV Yarımstansiyası',
+             'Fasadın kermoqranitlə üzlənməsi',
+             0,
+             '2021-01-02',
+             '2021-10-03',
+             'main_image_2.jpg'
+         );
+
+-- Suppose project_id of the above insert is 1 (auto-incremented)
+INSERT INTO project_images (project_id, image_url) VALUES
+                                                       (1, 'img_1.jpg'),
+                                                       (1, 'img_2.jpg'),
+                                                       (1, 'img_3.jpg'),
+
+                                                       (2, 'img_4.jpg'),
+                                                       (2, 'img_5.jpg'),
+                                                       (2, 'img_6.jpg');
+
+
+
+insert into partners(picture_url, web_site_url)
+values ('picture1.png', 'https://www.site1.com/'),
+       ('picture2.png', 'https://www.site2.com/'),
+       ('picture3.png', 'https://www.site3.com/');
