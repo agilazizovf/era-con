@@ -32,24 +32,31 @@ public class FileController {
     @GetMapping("/download/{filename:.+}")
     @ResponseBody
     public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
-
         Resource file = loadAsResource(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+        if (file == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
                 .body(file);
     }
 
+
     public Resource loadAsResource(String filename) {
         try {
-            Path file = load(filename);
+            Path file = load(filename); // <- BU sətri bura qoyursunuz
             Resource resource = new UrlResource(file.toUri());
-            if (resource.exists() || resource.isReadable()) {
+
+            if (resource.exists() && resource.isReadable()) {
                 return resource;
+            } else {
+                throw new RuntimeException("Fayl mövcud deyil və ya oxunaqlı deyil: " + filename);
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("URL səhvi: " + filename, e);
         }
-        return null;
     }
+
 
     public Path load(String filename) {
         return rootLocation.resolve(filename);
