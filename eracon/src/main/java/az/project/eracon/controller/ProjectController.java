@@ -4,10 +4,13 @@ import az.project.eracon.dto.request.AddProjectRequest;
 import az.project.eracon.dto.request.UpdateProjectRequest;
 import az.project.eracon.dto.response.MainImageResponse;
 import az.project.eracon.dto.response.ProjectResponse;
+import az.project.eracon.service.FileService;
 import az.project.eracon.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +24,7 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final FileService fileService;
 
     // ✅ Yeni layihə əlavə et
     @PostMapping("/add")
@@ -38,6 +42,14 @@ public class ProjectController {
     @GetMapping("/mainImage/{id}")
     public MainImageResponse getMainImage(@PathVariable Long id) {
         return projectService.getMainImage(id);
+    }
+
+    @GetMapping("/images/{filename:.+}")
+    public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
+        Resource file = fileService.loadFileAsResource("project_pictures", filename);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG) // və ya MIME tipini avtomatik aşkarla
+                .body(file);
     }
 
     // ✅ Layihə ID ilə getir

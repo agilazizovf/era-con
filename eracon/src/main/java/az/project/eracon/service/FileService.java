@@ -5,13 +5,17 @@ import az.project.eracon.exception.CustomException;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,6 +39,24 @@ public class FileService {
             }
         } catch (IOException e) {
             throw new RuntimeException("Could not create upload directory!", e);
+        }
+    }
+
+
+    public Resource loadFileAsResource(String folder, String filename) {
+        try {
+            Path filePath = Paths.get("uploads")
+                    .resolve(folder)
+                    .resolve(filename)
+                    .normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if (resource.exists()) {
+                return resource;
+            } else {
+                throw new FileNotFoundException("Fayl tapılmadı: " + filename);
+            }
+        } catch (MalformedURLException | FileNotFoundException ex) {
+            throw new RuntimeException("Fayl oxuna bilmədi: " + filename, ex);
         }
     }
 
