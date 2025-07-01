@@ -35,7 +35,7 @@ public class ProjectController {
         return projectService.findAll();
     }
 
-    @GetMapping("/mainImage")
+    @GetMapping("/mainImage/{id}")
     public MainImageResponse getMainImage(@PathVariable Long id) {
         return projectService.getMainImage(id);
     }
