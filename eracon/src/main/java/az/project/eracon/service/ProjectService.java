@@ -3,6 +3,7 @@ package az.project.eracon.service;
 import az.project.eracon.dto.request.AddProjectRequest;
 import az.project.eracon.dto.request.UpdateProjectRequest;
 import az.project.eracon.dto.response.FileResponse;
+import az.project.eracon.dto.response.MainImageResponse;
 import az.project.eracon.dto.response.ProjectResponse;
 import az.project.eracon.entity.ProjectEntity;
 import az.project.eracon.exception.CustomException;
@@ -82,6 +83,15 @@ public class ProjectService {
         projectRepository.save(project);
 
         return ProjectMapper.convertToDTO(project);
+    }
+
+    public MainImageResponse getMainImage(Long id) {
+        ProjectEntity project = projectRepository.findById(id)
+                .orElseThrow(() -> new CustomException("Layihə tapılmadı", "Project not found", "Not found", 404, null));
+        MainImageResponse imageResponse = new MainImageResponse();
+        imageResponse.setMainImageUrl(project.getMainImage());
+
+        return imageResponse;
     }
 
     public ProjectResponse uploadImages(Long projectId, List<MultipartFile> files) throws IOException {

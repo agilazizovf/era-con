@@ -2,6 +2,7 @@ package az.project.eracon.controller;
 
 import az.project.eracon.dto.request.AddProjectRequest;
 import az.project.eracon.dto.request.UpdateProjectRequest;
+import az.project.eracon.dto.response.MainImageResponse;
 import az.project.eracon.dto.response.ProjectResponse;
 import az.project.eracon.service.ProjectService;
 import jakarta.validation.Valid;
@@ -32,6 +33,11 @@ public class ProjectController {
     @GetMapping
     public List<ProjectResponse> findAll() {
         return projectService.findAll();
+    }
+
+    @GetMapping("/mainImage")
+    public MainImageResponse getMainImage(@PathVariable Long id) {
+        return projectService.getMainImage(id);
     }
 
     // ✅ Layihə ID ilə getir
