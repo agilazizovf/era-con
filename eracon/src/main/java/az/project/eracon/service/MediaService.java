@@ -26,7 +26,7 @@ public class MediaService {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file, "media/pictures");
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
             uploadedUrls.add(newFileName);
         }
@@ -44,7 +44,7 @@ public class MediaService {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file, "media/videos");
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
             uploadedUrls.add(newFileName);
         }
@@ -62,7 +62,7 @@ public class MediaService {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file, "media/documents");
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
             uploadedUrls.add(newFileName);
         }
@@ -76,11 +76,11 @@ public class MediaService {
     }
 
 
-    private MediaEntity uploadMedia(MultipartFile[] files, String subFolder) throws IOException {
+    private MediaEntity uploadMedia(MultipartFile[] files) throws IOException {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> response = fileService.uploadFile(file, subFolder);
+            ResponseEntity<FileResponse> response = fileService.uploadFile(file);
             uploadedUrls.add(response.getBody().getUuidName());
         }
 
@@ -108,13 +108,13 @@ public class MediaService {
         // Delete old files from their folders — here you must know the folder,
         // so either store it or assume a default folder, e.g. "media"
         for (String oldFile : existing.getMediaUrls()) {
-            fileService.deleteFile(oldFile, "media"); // or dynamically find folder
+            fileService.deleteFile(oldFile); // or dynamically find folder
         }
 
         // Upload new files to the same folder ("media")
         List<String> newUrls = new ArrayList<>();
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> response = fileService.uploadFile(file, "media"); // no type param now
+            ResponseEntity<FileResponse> response = fileService.uploadFile(file); // no type param now
             newUrls.add(response.getBody().getUuidName());
         }
 
@@ -126,7 +126,7 @@ public class MediaService {
                 .orElseThrow(() -> new CustomException("Media tapılmadı", "Media not found", "Not Found", 404, null));
 
         for (String fileName : media.getMediaUrls()) {
-            fileService.deleteFile(fileName, "media");  // again, assume default folder
+            fileService.deleteFile(fileName);  // again, assume default folder
         }
 
         mediaRepository.delete(media);

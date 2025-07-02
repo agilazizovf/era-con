@@ -64,14 +64,14 @@ public class PartnerService {
         // Delete old picture if exists
         if (partner.getPictureUrl() != null) {
             try {
-                fileService.deleteFile(partner.getPictureUrl(), "partner_pictures");
+                fileService.deleteFile(partner.getPictureUrl());
             } catch (CustomException e) {
                 System.err.println("Köhnə fayl silinə bilmədi: " + partner.getPictureUrl() + " - " + e.getMessage());
             }
         }
 
         // Upload new file
-        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file, "partner_pictures");
+        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
         String newFileName = uploaded.getBody().getUuidName();
 
         partner.setPictureUrl(newFileName);
@@ -86,7 +86,7 @@ public class PartnerService {
 
         try {
             if (partner.getPictureUrl() != null) {
-                fileService.deleteFile(partner.getPictureUrl(), "partner_pictures");
+                fileService.deleteFile(partner.getPictureUrl());
             }
         } catch (CustomException e) {
             System.err.println("Failed to delete file: " + partner.getPictureUrl() + " - " + e.getMessage());

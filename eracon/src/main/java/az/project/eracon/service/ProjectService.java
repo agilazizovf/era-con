@@ -76,7 +76,7 @@ public class ProjectService {
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new CustomException("Layihə tapılmadı", "Project not found", "Not found", 404, null));
 
-        ResponseEntity<FileResponse> response = fileService.uploadFile(file, "project_pictures");
+        ResponseEntity<FileResponse> response = fileService.uploadFile(file);
         String fileName = response.getBody().getUuidName();
 
         project.setMainImage(fileName);
@@ -100,7 +100,7 @@ public class ProjectService {
 
         List<String> imagePaths = new ArrayList<>();
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> response = fileService.uploadFile(file, "project_pictures");
+            ResponseEntity<FileResponse> response = fileService.uploadFile(file);
             imagePaths.add(response.getBody().getUuidName());
         }
 

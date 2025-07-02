@@ -73,7 +73,7 @@ public class AboutService {
         List<AboutPictureEntity> newPictures = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file, "about_pictures");
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
 
             AboutPictureEntity picture = new AboutPictureEntity();
@@ -101,7 +101,7 @@ public class AboutService {
                 .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not found", 404, null));
 
         try {
-            fileService.deleteFile(picture.getFileName(), "about_pictures"); // delete from disk
+            fileService.deleteFile(picture.getFileName()); // delete from disk
         } catch (CustomException e) {
             System.err.println("Failed to delete file: " + picture.getFileName() + " - " + e.getMessage());
         }

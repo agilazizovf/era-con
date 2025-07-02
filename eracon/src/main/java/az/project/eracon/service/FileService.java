@@ -42,45 +42,34 @@ public class FileService {
         }
     }
 
+    public ResponseEntity<FileResponse> uploadFile(MultipartFile file) throws IOException {
 
-    public Resource loadFileAsResource(String folder, String filename) {
-        try {
-            Path filePath = Paths.get("uploads")
-                    .resolve(folder)
-                    .resolve(filename)
-                    .normalize();
-            Resource resource = new UrlResource(filePath.toUri());
-            if (resource.exists()) {
-                return resource;
-            } else {
-                throw new FileNotFoundException("Fayl tapılmadı: " + filename);
-            }
-        } catch (MalformedURLException | FileNotFoundException ex) {
-            throw new RuntimeException("Fayl oxuna bilmədi: " + filename, ex);
-        }
-    }
+        // Get stream from file
+        InputStream stream = file.getInputStream();
 
-    public ResponseEntity<FileResponse> uploadFile(MultipartFile file, String subFolder) throws IOException {
-        if (file.getSize() > 30_000_000) {
-            throw new CustomException("Faylın ölçüsü çoxdur. Maksimum 30 MB", "File size is too big", "Bad Request", 400, null);
-        }
-
-        // Create dynamic folder inside base path
-        Path fullPath = Paths.get(fileLocation, subFolder);
-        if (!Files.exists(fullPath)) {
-            Files.createDirectories(fullPath);
-        }
-
+        // Get file original name
         String originalFilename = file.getOriginalFilename();
-        String extension = originalFilename.substring(originalFilename.lastIndexOf('.'));
-        String uuidName = UUID.randomUUID() + extension;
 
-        Path targetPath = fullPath.resolve(uuidName);
-        try (InputStream stream = file.getInputStream()) {
-            Files.copy(stream, targetPath, StandardCopyOption.REPLACE_EXISTING);
+        if (file.getSize() > 30_000_000) {
+            throw new CustomException("Faylın ölçüsü çoxdur. Maksimum 30 MB", "file size is too big", "bad req", 400, null);
         }
 
-        FileResponse created = new FileResponse(uuidName);
+        // Create random name
+        UUID uuid = UUID.randomUUID();
+        String randomName = uuid.toString();
+
+        // Get file original name without extension
+        String fileNameWithoutExtension = originalFilename.substring(0, originalFilename.lastIndexOf('.'));
+
+        // File random name for saving on disk
+        String fileRandomName = originalFilename.replace(fileNameWithoutExtension, randomName);
+
+        // Save file to disk
+        Files.copy(stream, Paths.get(fileLocation + fileRandomName), StandardCopyOption.REPLACE_EXISTING);
+
+        // Create file entity object
+
+        FileResponse created = new FileResponse(fileRandomName);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{uuidName}")
                 .buildAndExpand(created.getUuidName()).toUri();
 
@@ -88,8 +77,8 @@ public class FileService {
     }
 
 
-    public void deleteFile(String fileName, String subFolder) {
-        Path filePath = Paths.get(fileLocation, subFolder, fileName);
+    public void deleteFile(String fileName) {
+        Path filePath = Paths.get(fileLocation, fileName);
         try {
             if (Files.exists(filePath)) {
                 Files.delete(filePath);

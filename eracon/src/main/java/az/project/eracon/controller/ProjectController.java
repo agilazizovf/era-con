@@ -44,13 +44,13 @@ public class ProjectController {
         return projectService.getMainImage(id);
     }
 
-    @GetMapping("/images/{filename:.+}")
-    public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
-        Resource file = fileService.loadFileAsResource("project_pictures", filename);
-        return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG) // və ya MIME tipini avtomatik aşkarla
-                .body(file);
-    }
+//    @GetMapping("/images/{filename:.+}")
+//    public ResponseEntity<Resource> getImage(@PathVariable String filename) throws IOException {
+//        Resource file = fileService.loadFileAsResource("project_pictures", filename);
+//        return ResponseEntity.ok()
+//                .contentType(MediaType.IMAGE_JPEG) // və ya MIME tipini avtomatik aşkarla
+//                .body(file);
+//    }
 
     // ✅ Layihə ID ilə getir
     @GetMapping("/{id}")
