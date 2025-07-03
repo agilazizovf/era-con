@@ -41,31 +41,62 @@ public class MediaController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<MediaResponse>> getAll() {
-        return ResponseEntity.ok(mediaService.getAll());
+    @GetMapping("/pictures")
+    public ResponseEntity<List<MediaResponse>> getAllPictures() {
+        return ResponseEntity.ok(mediaService.getAllPictures());
+    }
+    @GetMapping("/videos")
+    public ResponseEntity<List<MediaResponse>> getAllVideos() {
+        return ResponseEntity.ok(mediaService.getAllVideos());
+    }
+    @GetMapping("/documents")
+    public ResponseEntity<List<MediaResponse>> getAllDocuments() {
+        return ResponseEntity.ok(mediaService.getAllDocuments());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/picture/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<MediaResponse> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(mediaService.getById(id));
+    public ResponseEntity<MediaResponse> getPictureById(@PathVariable Long id) {
+        return ResponseEntity.ok(mediaService.getPictureById(id));
+    }
+    @GetMapping("/video/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<MediaResponse> getVideoById(@PathVariable Long id) {
+        return ResponseEntity.ok(mediaService.getVideoById(id));
+    }
+    @GetMapping("/document/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<MediaResponse> getDocumentById(@PathVariable Long id) {
+        return ResponseEntity.ok(mediaService.getDocumentById(id));
     }
 
     // Update media by id (files only, no type param)
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<MediaResponse> updateMedia(
-            @PathVariable Long id,
-            @RequestParam("files") MultipartFile[] files) throws IOException {
-        return ResponseEntity.ok(mediaService.updateMedia(id, files));
-    }
+//    @PutMapping("/{id}")
+//    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+//    public ResponseEntity<MediaResponse> updateMedia(
+//            @PathVariable Long id,
+//            @RequestParam("files") MultipartFile[] files) throws IOException {
+//        return ResponseEntity.ok(mediaService.updateMedia(id, files));
+//    }
 
     // Delete media by id
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Void> deleteMedia(@PathVariable Long id) {
-        mediaService.deleteMedia(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<String> deletePicture(@PathVariable Long id) {
+        mediaService.deletePicture(id);
+        return ResponseEntity.ok("Şəkil uğurla silindi.");
     }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<String> deleteVideo(@PathVariable Long id) {
+        mediaService.deleteVideo(id);
+        return ResponseEntity.ok("Video uğurla silindi.");
+    }
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<String> deleteDocument(@PathVariable Long id) {
+        mediaService.deleteDocument(id);
+        return ResponseEntity.ok("Sənəd uğurla silindi.");
+    }
+
 }

@@ -8,18 +8,18 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Entity
-@Table(name = "medias")
+@Table(name = "pictures")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MediaEntity {
+public class PictureEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ElementCollection
-    @CollectionTable(name = "media_files", joinColumns = @JoinColumn(name = "media_id"))
-    @Column(name = "media_url")
+    @CollectionTable(name = "picture_files", joinColumns = @JoinColumn(name = "picture_id"))
+    @Column(name = "picture_url")
     private List<String> mediaUrls;
 }

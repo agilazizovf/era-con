@@ -44,7 +44,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/purchases").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/partner").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/media").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/media/picture").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/media/video").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/media/document").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/contact").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
