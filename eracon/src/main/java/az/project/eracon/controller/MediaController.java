@@ -80,19 +80,19 @@ public class MediaController {
 //    }
 
     // Delete media by id
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/picture/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> deletePicture(@PathVariable Long id) {
         mediaService.deletePicture(id);
         return ResponseEntity.ok("Şəkil uğurla silindi.");
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/video/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> deleteVideo(@PathVariable Long id) {
         mediaService.deleteVideo(id);
         return ResponseEntity.ok("Video uğurla silindi.");
     }
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/document/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> deleteDocument(@PathVariable Long id) {
         mediaService.deleteDocument(id);
