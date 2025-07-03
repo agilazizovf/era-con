@@ -18,8 +18,5 @@ public class VideoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ElementCollection
-    @CollectionTable(name = "video_files", joinColumns = @JoinColumn(name = "video_id"))
-    @Column(name = "video_url")
-    private List<String> mediaUrls;
+    private String videoUrl;
 }

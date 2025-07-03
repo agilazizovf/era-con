@@ -1,5 +1,6 @@
 package az.project.eracon.service;
 
+import az.project.eracon.dto.request.AddVideoRequest;
 import az.project.eracon.dto.response.FileResponse;
 import az.project.eracon.dto.response.MediaResponse;
 import az.project.eracon.entity.DocumentEntity;
@@ -9,6 +10,7 @@ import az.project.eracon.exception.CustomException;
 import az.project.eracon.mapper.DocumentMapper;
 import az.project.eracon.mapper.PictureMapper;
 import az.project.eracon.mapper.VideoMapper;
+import az.project.eracon.mapper.VideoResponse;
 import az.project.eracon.repository.DocumentRepository;
 import az.project.eracon.repository.PictureRepository;
 import az.project.eracon.repository.VideoRepository;
@@ -56,27 +58,12 @@ public class MediaService {
 
 
 
-    public MediaResponse uploadVideos(MultipartFile[] files) throws IOException {
-        List<VideoEntity> existing = videoRepository.findAll();
-        for (VideoEntity entity : existing) {
-            for (String url : entity.getMediaUrls()) {
-                fileService.deleteFile(url); // Implement delete in fileService
-            }
-            videoRepository.delete(entity);
-        }
+    public VideoResponse uploadVideos(AddVideoRequest request) {
+        VideoEntity video = new VideoEntity();
+        video.setVideoUrl(request.getVideoUrl());
+        videoRepository.save(video);
 
-        List<String> uploadedUrls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
-            String newFileName = uploaded.getBody().getUuidName();
-            uploadedUrls.add(newFileName);
-        }
-
-        VideoEntity mediaEntity = new VideoEntity();
-        mediaEntity.setMediaUrls(uploadedUrls);
-        videoRepository.save(mediaEntity);
-
-        return VideoMapper.convertToDTO(mediaEntity);
+        return VideoMapper.convertToDTO(video);
     }
 
     public MediaResponse uploadDocuments(MultipartFile[] files) throws IOException {
@@ -121,7 +108,7 @@ public class MediaService {
                 .map(PictureMapper::convertToDTO)
                 .toList();
     }
-    public List<MediaResponse> getAllVideos() {
+    public List<VideoResponse> getAllVideos() {
         return videoRepository.findAll().stream()
                 .map(VideoMapper::convertToDTO)
                 .toList();
@@ -137,7 +124,7 @@ public class MediaService {
                 .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not Found", 404, null));
         return PictureMapper.convertToDTO(picture);
     }
-    public MediaResponse getVideoById(Long id) {
+    public VideoResponse getVideoById(Long id) {
         VideoEntity video = videoRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Video tapılmadı", "Video not found", "Not Found", 404, null));
         return VideoMapper.convertToDTO(video);
@@ -180,8 +167,6 @@ public void deletePicture(Long id) {
     public void deleteVideo(Long id) {
         VideoEntity media = videoRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Video tapılmadı", "Video not found", "Not Found", 404, null));
-
-        media.getMediaUrls().forEach(fileService::deleteFile);
         videoRepository.delete(media);
     }
 

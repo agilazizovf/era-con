@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class VideoMapper {
-    public static MediaResponse convertToDTO(VideoEntity media) {
-        MediaResponse response = new MediaResponse();
+    public static VideoResponse convertToDTO(VideoEntity media) {
+        VideoResponse response = new VideoResponse();
         response.setId(media.getId());
-        response.setMediaUrls(media.getMediaUrls());
+        response.setVideoUrl(media.getVideoUrl());
 
         return response;
     }
 
-    public static List<MediaResponse> convertToDTOList(List<VideoEntity> medias) {
+    public static List<VideoResponse> convertToDTOList(List<VideoEntity> medias) {
         return medias.stream()
                 .map(VideoMapper::convertToDTO)
                 .collect(Collectors.toList());
