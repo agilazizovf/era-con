@@ -28,10 +28,11 @@ public class MediaController {
         return ResponseEntity.ok(mediaService.uploadPictures(files.toArray(new MultipartFile[0])));
     }
 
-    @PostMapping(value = "/videos")
+    @PostMapping(value = "/videos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<VideoResponse> uploadVideos(@RequestBody AddVideoRequest request){
-        return ResponseEntity.ok(mediaService.uploadVideos(request));
+    public ResponseEntity<MediaResponse> uploadVideos(
+            @RequestParam("files") List<MultipartFile> files) throws IOException {
+        return ResponseEntity.ok(mediaService.uploadVideos(files.toArray(new MultipartFile[0])));
     }
 
     @PostMapping(value = "/documents", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -47,7 +48,7 @@ public class MediaController {
         return ResponseEntity.ok(mediaService.getAllPictures());
     }
     @GetMapping("/videos")
-    public ResponseEntity<List<VideoResponse>> getAllVideos() {
+    public ResponseEntity<List<MediaResponse>> getAllVideos() {
         return ResponseEntity.ok(mediaService.getAllVideos());
     }
     @GetMapping("/documents")
@@ -62,7 +63,7 @@ public class MediaController {
     }
     @GetMapping("/video/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<VideoResponse> getVideoById(@PathVariable Long id) {
+    public ResponseEntity<MediaResponse> getVideoById(@PathVariable Long id) {
         return ResponseEntity.ok(mediaService.getVideoById(id));
     }
     @GetMapping("/document/{id}")
