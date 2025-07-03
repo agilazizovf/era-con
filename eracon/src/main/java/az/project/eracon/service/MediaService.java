@@ -1,6 +1,5 @@
 package az.project.eracon.service;
 
-import az.project.eracon.dto.request.AddVideoRequest;
 import az.project.eracon.dto.response.FileResponse;
 import az.project.eracon.dto.response.MediaResponse;
 import az.project.eracon.entity.DocumentEntity;
@@ -58,12 +57,25 @@ public class MediaService {
 
 
 
-    public VideoResponse uploadVideos(AddVideoRequest request) {
-        VideoEntity video = new VideoEntity();
-        video.setVideoUrl(request.getVideoUrl());
-        videoRepository.save(video);
+    public MediaResponse uploadVideos(MultipartFile[] files) throws IOException {
+        List<VideoEntity> existing = videoRepository.findAll();
+        for (VideoEntity entity : existing) {
+            for (String url : entity.getMediaUrls()) {
+                fileService.deleteFile(url);
+            }
+            videoRepository.delete(entity);
+        }
+        List<String> uploadedUrls = new ArrayList<>();
+        for (MultipartFile file : files) {
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+            String newFileName = uploaded.getBody().getUuidName();
+            uploadedUrls.add(newFileName);
+        }
+        VideoEntity mediaEntity = new VideoEntity();
+        mediaEntity.setMediaUrls(uploadedUrls);
+        videoRepository.save(mediaEntity);
 
-        return VideoMapper.convertToDTO(video);
+        return VideoMapper.convertToDTO(mediaEntity);
     }
 
     public MediaResponse uploadDocuments(MultipartFile[] files) throws IOException {
@@ -108,7 +120,7 @@ public class MediaService {
                 .map(PictureMapper::convertToDTO)
                 .toList();
     }
-    public List<VideoResponse> getAllVideos() {
+    public List<MediaResponse> getAllVideos() {
         return videoRepository.findAll().stream()
                 .map(VideoMapper::convertToDTO)
                 .toList();
@@ -124,7 +136,7 @@ public class MediaService {
                 .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not Found", 404, null));
         return PictureMapper.convertToDTO(picture);
     }
-    public VideoResponse getVideoById(Long id) {
+    public MediaResponse getVideoById(Long id) {
         VideoEntity video = videoRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Video tapılmadı", "Video not found", "Not Found", 404, null));
         return VideoMapper.convertToDTO(video);

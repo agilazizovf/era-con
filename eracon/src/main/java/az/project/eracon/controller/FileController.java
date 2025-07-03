@@ -42,19 +42,19 @@ public class FileController {
         }
     }
 
-    @GetMapping("/video/{filename:.+}")
-    @ResponseBody
-    public ResponseEntity<Resource> streamVideo(@PathVariable String filename) {
-        try {
-            Resource videoFile = loadAsResource(filename);
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"") // not 'attachment'
-                    .header(HttpHeaders.CONTENT_TYPE, "video/mp4") // adjust if needed
-                    .body(videoFile);
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(404).body(null);
-        }
-    }
+//    @GetMapping("/video/{filename:.+}")
+//    @ResponseBody
+//    public ResponseEntity<Resource> streamVideo(@PathVariable String filename) {
+//        try {
+//            Resource videoFile = loadAsResource(filename);
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"") // not 'attachment'
+//                    .header(HttpHeaders.CONTENT_TYPE, "video/mp4") // adjust if needed
+//                    .body(videoFile);
+//        } catch (RuntimeException ex) {
+//            return ResponseEntity.status(404).body(null);
+//        }
+//    }
 
 
 
