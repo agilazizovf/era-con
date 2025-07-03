@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/repair-constructions").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/construction-audits").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/purchases").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/social-media").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/partner").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/media/picture").permitAll()
