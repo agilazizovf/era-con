@@ -45,9 +45,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/social-media").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/partner").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/media/picture").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/media/video").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/media/document").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/media/pictures").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/media/videos").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/media/documents").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/contact").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
