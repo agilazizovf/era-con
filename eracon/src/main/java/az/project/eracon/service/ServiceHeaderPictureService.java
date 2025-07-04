@@ -1,6 +1,7 @@
 package az.project.eracon.service;
 
 import az.project.eracon.dto.response.FileResponse;
+import az.project.eracon.dto.response.HeaderPictureResponse;
 import az.project.eracon.entity.ServiceHeaderPictureEntity;
 import az.project.eracon.exception.CustomException;
 import az.project.eracon.repository.ServiceHeaderPictureRepository;
@@ -18,7 +19,7 @@ public class ServiceHeaderPictureService {
     private final ServiceHeaderPictureRepository repository;
     private final FileService fileService;
 
-    public void uploadPicture(MultipartFile picture) throws IOException {
+    public HeaderPictureResponse uploadPicture(MultipartFile picture) throws IOException {
         if (picture == null || picture.isEmpty()) {
             throw new CustomException("Şəkil boş ola bilməz", "Picture cannot be empty", "Bad Request", 400, null);
         }
@@ -31,6 +32,12 @@ public class ServiceHeaderPictureService {
         ServiceHeaderPictureEntity newPicture = new ServiceHeaderPictureEntity();
         newPicture.setPictureUrl(pictureUrl);
         repository.save(newPicture);
+
+        HeaderPictureResponse response = new HeaderPictureResponse();
+        response.setId(newPicture.getId());
+        response.setUrl(newPicture.getPictureUrl());
+
+        return response;
     }
 
 
@@ -46,9 +53,14 @@ public class ServiceHeaderPictureService {
         repository.delete(picture);
     }
 
-    public String getPictureUrl() {
+    public HeaderPictureResponse getPictureUrl() {
         return repository.findTopByOrderByIdAsc()
-                .map(ServiceHeaderPictureEntity::getPictureUrl)
+                .map(entity -> {
+                    HeaderPictureResponse response = new HeaderPictureResponse();
+                    response.setId(entity.getId());
+                    response.setUrl(entity.getPictureUrl());
+                    return response;
+                })
                 .orElse(null);
     }
 }
