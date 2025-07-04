@@ -48,7 +48,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/partner-header-picture").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/media-header-picture").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/contact-header-picture").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/main-page-pictures").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/main-page-pictures/pictures").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/social-media").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/projects/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/partner").permitAll()
