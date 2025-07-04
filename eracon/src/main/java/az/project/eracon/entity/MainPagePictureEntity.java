@@ -19,7 +19,7 @@ public class MainPagePictureEntity {
     private Long id;
 
     @ElementCollection
-    @CollectionTable(name = "picture_files", joinColumns = @JoinColumn(name = "picture_id"))
-    @Column(name = "picture_url")
+    @CollectionTable(name = "media_page_picture_files", joinColumns = @JoinColumn(name = "media_page_picture_id"))
+    @Column(name = "media_page_picture_url")
     private List<String> mediaUrls;
 }

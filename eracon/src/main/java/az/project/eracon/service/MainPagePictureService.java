@@ -49,6 +49,7 @@ public class MainPagePictureService {
         }
 
         MainPagePictureEntity mediaEntity = new MainPagePictureEntity();
+        mainPagePictureRepository.save(mediaEntity);
         mediaEntity.setMediaUrls(uploadedUrls);
         mainPagePictureRepository.save(mediaEntity);
 
