@@ -2,6 +2,7 @@ package az.project.eracon.controller;
 
 import az.project.eracon.service.ContactHeaderPictureService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class ContactHeaderPictureController {
     private final ContactHeaderPictureService service;
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadPicture(@RequestParam("picture") MultipartFile picture) throws IOException {
         service.uploadPicture(picture);
         return ResponseEntity.ok().build();
