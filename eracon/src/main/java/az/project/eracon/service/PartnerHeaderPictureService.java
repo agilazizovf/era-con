@@ -1,24 +1,37 @@
 package az.project.eracon.service;
 
+import az.project.eracon.dto.response.FileResponse;
 import az.project.eracon.entity.PartnerHeaderPictureEntity;
 import az.project.eracon.exception.CustomException;
 import az.project.eracon.repository.PartnerHeaderPictureRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
 public class PartnerHeaderPictureService {
 
     private final PartnerHeaderPictureRepository repository;
+    private final FileService fileService;
+    public void uploadPicture(MultipartFile picture) throws IOException {
+        if (picture == null || picture.isEmpty()) {
+            throw new CustomException("Şəkil boş ola bilməz", "Picture cannot be empty", "Bad Request", 400, null);
+        }
 
-    public void uploadPicture(String pictureUrl) {
+        ResponseEntity<FileResponse> uploadResponse = fileService.uploadFile(picture);
+        String pictureUrl = uploadResponse.getBody().getUuidName();
+
         repository.findTopByOrderByIdAsc().ifPresent(repository::delete);
 
         PartnerHeaderPictureEntity newPicture = new PartnerHeaderPictureEntity();
         newPicture.setPictureUrl(pictureUrl);
         repository.save(newPicture);
     }
+
 
     public void deletePicture(Long id) {
         PartnerHeaderPictureEntity picture = repository.findById(id)
