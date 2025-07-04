@@ -50,7 +50,7 @@ public class FileService {
         // Get file original name
         String originalFilename = file.getOriginalFilename();
 
-        if (file.getSize() > 30_000_000) {
+        if (file.getSize() > 1_024_000_000) {
             throw new CustomException("Faylın ölçüsü çoxdur. Maksimum 30 MB", "file size is too big", "bad req", 400, null);
         }
 

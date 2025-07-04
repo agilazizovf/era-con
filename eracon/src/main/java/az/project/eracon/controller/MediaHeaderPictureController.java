@@ -1,5 +1,6 @@
 package az.project.eracon.controller;
 
+import az.project.eracon.dto.response.HeaderPictureResponse;
 import az.project.eracon.service.MediaHeaderPictureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -19,7 +20,7 @@ public class MediaHeaderPictureController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadPicture(@RequestParam("picture") MultipartFile picture) throws IOException {
+    public ResponseEntity<HeaderPictureResponse> uploadPicture(@RequestParam("picture") MultipartFile picture) throws IOException {
         service.uploadPicture(picture);
         return ResponseEntity.ok().build();
     }
@@ -31,7 +32,7 @@ public class MediaHeaderPictureController {
     }
 
     @GetMapping
-    public String getCurrentPictureUrl() {
+    public HeaderPictureResponse getCurrentPictureUrl() {
         return service.getPictureUrl();
     }
 }

@@ -1,5 +1,6 @@
 package az.project.eracon.controller;
 
+import az.project.eracon.dto.response.HeaderPictureResponse;
 import az.project.eracon.entity.ProjectHeaderPictureEntity;
 import az.project.eracon.service.ProjectHeaderPictureService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class ProjectHeaderPictureController {
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ProjectHeaderPictureEntity uploadPicture(@RequestParam("picture") MultipartFile picture) throws IOException {
+    public HeaderPictureResponse uploadPicture(@RequestParam("picture") MultipartFile picture) throws IOException {
         return service.uploadPicture(picture);
     }
 
@@ -30,7 +31,7 @@ public class ProjectHeaderPictureController {
     }
 
     @GetMapping
-    public String getCurrentPictureUrl() {
+    public HeaderPictureResponse getCurrentPictureUrl() {
         return service.getPictureUrl();
     }
 }

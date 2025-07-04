@@ -1,6 +1,7 @@
 package az.project.eracon.service;
 
 import az.project.eracon.dto.response.FileResponse;
+import az.project.eracon.dto.response.HeaderPictureResponse;
 import az.project.eracon.entity.ProjectHeaderPictureEntity;
 import az.project.eracon.exception.CustomException;
 import az.project.eracon.repository.ProjectHeaderPictureRepository;
@@ -18,7 +19,7 @@ public class ProjectHeaderPictureService {
     private final ProjectHeaderPictureRepository repository;
     private final FileService fileService;
 
-    public ProjectHeaderPictureEntity uploadPicture(MultipartFile picture) throws IOException {
+    public HeaderPictureResponse uploadPicture(MultipartFile picture) throws IOException {
         if (picture == null || picture.isEmpty()) {
             throw new CustomException("Şəkil boş ola bilməz", "Picture cannot be empty", "Bad Request", 400, null);
         }
@@ -34,7 +35,13 @@ public class ProjectHeaderPictureService {
         ProjectHeaderPictureEntity newPicture = new ProjectHeaderPictureEntity();
         newPicture.setPictureUrl(pictureUrl);
 
-        return repository.save(newPicture);
+        repository.save(newPicture);
+
+        HeaderPictureResponse response = new HeaderPictureResponse();
+        response.setId(newPicture.getId());
+        response.setUrl(newPicture.getPictureUrl());
+
+        return response;
     }
 
     public void deletePicture(Long id) {
@@ -49,9 +56,14 @@ public class ProjectHeaderPictureService {
         repository.delete(picture);
     }
 
-    public String getPictureUrl() {
+    public HeaderPictureResponse getPictureUrl() {
         return repository.findTopByOrderByIdAsc()
-                .map(ProjectHeaderPictureEntity::getPictureUrl)
+                .map(entity -> {
+                    HeaderPictureResponse response = new HeaderPictureResponse();
+                    response.setId(entity.getId());
+                    response.setUrl(entity.getPictureUrl());
+                    return response;
+                })
                 .orElse(null);
     }
 }
