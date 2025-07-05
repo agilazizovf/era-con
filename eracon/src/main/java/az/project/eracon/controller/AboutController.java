@@ -52,6 +52,7 @@ public class AboutController {
     }
 
     @PostMapping(value = "/{id}/pictures", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<AboutResponse>> uploadPictures(
             @PathVariable Long id,
             @RequestPart("files") List<MultipartFile> files) throws IOException {
@@ -59,6 +60,7 @@ public class AboutController {
     }
 
     @PutMapping(value = "/{pictureId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<AboutResponse> updatePicture(
             @PathVariable Long pictureId,
             @RequestParam("file") MultipartFile file) throws IOException {

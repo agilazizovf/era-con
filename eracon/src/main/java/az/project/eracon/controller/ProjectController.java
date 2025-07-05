@@ -72,12 +72,14 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/{projectId}/upload-main-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ProjectResponse uploadMainImage(@PathVariable Long projectId,
                                            @RequestParam("file") MultipartFile file) throws IOException {
         return projectService.uploadMainImage(projectId, file);
     }
 
     @PostMapping(value = "/{projectId}/upload-images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ProjectResponse> uploadImages(
             @PathVariable Long projectId,
             @RequestPart("files") List<MultipartFile> files) throws IOException {
@@ -87,6 +89,7 @@ public class ProjectController {
     }
 
     @PutMapping(value = "/pictures/{pictureId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ProjectResponse> updateImage(
             @PathVariable Long pictureId,
             @RequestParam("file") MultipartFile file) throws IOException {
@@ -96,6 +99,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/pictures/{pictureId}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deletePicture(@PathVariable Long pictureId) {
         projectService.deletePicture(pictureId);
         return ResponseEntity.noContent().build();
