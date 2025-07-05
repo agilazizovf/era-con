@@ -2,6 +2,7 @@ package az.project.eracon.service;
 
 import az.project.eracon.dto.response.FileResponse;
 import az.project.eracon.dto.response.MediaResponse;
+import az.project.eracon.dto.response.VideoResponse;
 import az.project.eracon.entity.DocumentEntity;
 import az.project.eracon.entity.PictureEntity;
 import az.project.eracon.entity.VideoEntity;
@@ -9,7 +10,6 @@ import az.project.eracon.exception.CustomException;
 import az.project.eracon.mapper.DocumentMapper;
 import az.project.eracon.mapper.PictureMapper;
 import az.project.eracon.mapper.VideoMapper;
-import az.project.eracon.mapper.VideoResponse;
 import az.project.eracon.repository.DocumentRepository;
 import az.project.eracon.repository.PictureRepository;
 import az.project.eracon.repository.VideoRepository;
@@ -57,26 +57,26 @@ public class MediaService {
 
 
 
-    public MediaResponse uploadVideos(MultipartFile[] files) throws IOException {
+    public VideoResponse uploadVideo(MultipartFile file) throws IOException {
+        // Delete all existing video entities and their files
         List<VideoEntity> existing = videoRepository.findAll();
         for (VideoEntity entity : existing) {
-            for (String url : entity.getMediaUrls()) {
-                fileService.deleteFile(url);
-            }
+            fileService.deleteFile(entity.getVideoUrl());
             videoRepository.delete(entity);
         }
-        List<String> uploadedUrls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
-            String newFileName = uploaded.getBody().getUuidName();
-            uploadedUrls.add(newFileName);
-        }
+
+        // Upload the new file
+        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+        String newFileName = uploaded.getBody().getUuidName();
+
+        // Save new VideoEntity with single videoUrl
         VideoEntity mediaEntity = new VideoEntity();
-        mediaEntity.setMediaUrls(uploadedUrls);
+        mediaEntity.setVideoUrl(newFileName);
         videoRepository.save(mediaEntity);
 
         return VideoMapper.convertToDTO(mediaEntity);
     }
+
 
     public MediaResponse uploadDocuments(MultipartFile[] files) throws IOException {
         List<DocumentEntity> existing = documentRepository.findAll();
