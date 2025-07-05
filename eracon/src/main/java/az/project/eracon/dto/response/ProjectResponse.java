@@ -17,5 +17,5 @@ public class ProjectResponse {
     private String endDate;
 
     private String mainImage;
-    private List<String> additionalImages;
+    private List<ProjectPictureResponse> pictures;
 }

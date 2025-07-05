@@ -1,5 +1,6 @@
 package az.project.eracon.mapper;
 
+import az.project.eracon.dto.response.ProjectPictureResponse;
 import az.project.eracon.dto.response.ProjectResponse;
 import az.project.eracon.entity.ProjectEntity;
 
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 public class ProjectMapper {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
     public static ProjectResponse convertToDTO(ProjectEntity project) {
         ProjectResponse dto = new ProjectResponse();
         dto.setId(project.getId());
@@ -21,7 +23,17 @@ public class ProjectMapper {
                 ? project.getEndDate().format(formatter)
                 : "Davam edir");
         dto.setMainImage(project.getMainImage());
-        dto.setAdditionalImages(project.getAdditionalImages());
+
+        // ProjectPictures varsa onları da map et
+        if (project.getPictures() != null) {
+            List<ProjectPictureResponse> pictureDTOs = project.getPictures().stream().map(picture -> {
+                ProjectPictureResponse picDto = new ProjectPictureResponse();
+                picDto.setId(picture.getId());
+                picDto.setUrl(picture.getFileName());
+                return picDto;
+            }).collect(Collectors.toList());
+            dto.setPictures(pictureDTOs);
+        }
 
         return dto;
     }

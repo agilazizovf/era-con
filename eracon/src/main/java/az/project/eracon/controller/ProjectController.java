@@ -24,7 +24,6 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
-    private final FileService fileService;
 
     // ✅ Yeni layihə əlavə et
     @PostMapping("/add")
@@ -79,10 +78,27 @@ public class ProjectController {
     }
 
     @PostMapping(value = "/{projectId}/upload-images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ProjectResponse uploadImages(@PathVariable Long projectId,
-                                        @RequestParam("files") List<MultipartFile> files) throws IOException {
-        return projectService.uploadImages(projectId, files);
+    public ResponseEntity<ProjectResponse> uploadImages(
+            @PathVariable Long projectId,
+            @RequestPart("files") List<MultipartFile> files) throws IOException {
+
+        ProjectResponse response = projectService.uploadImages(projectId, files);
+        return ResponseEntity.ok(response);
     }
 
+    @PutMapping(value = "/pictures/{pictureId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProjectResponse> updateImage(
+            @PathVariable Long pictureId,
+            @RequestParam("file") MultipartFile file) throws IOException {
+
+        ProjectResponse response = projectService.updateImage(pictureId, file);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/pictures/{pictureId}")
+    public ResponseEntity<Void> deletePicture(@PathVariable Long pictureId) {
+        projectService.deletePicture(pictureId);
+        return ResponseEntity.noContent().build();
+    }
 
 }

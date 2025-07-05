@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,8 +29,11 @@ public class ProjectEntity {
 
     private String mainImage;
 
-    @ElementCollection
-    @CollectionTable(name = "project_images", joinColumns = @JoinColumn(name = "project_id"))
-    @Column(name = "image_url")
-    private List<String> additionalImages; // Əlavə şəkillər
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectPictureEntity> pictures = new ArrayList<>();
+
+//    @ElementCollection
+//    @CollectionTable(name = "project_images", joinColumns = @JoinColumn(name = "project_id"))
+//    @Column(name = "image_url")
+//    private List<String> additionalImages; // Əlavə şəkillər
 }

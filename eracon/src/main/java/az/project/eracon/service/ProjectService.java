@@ -6,8 +6,10 @@ import az.project.eracon.dto.response.FileResponse;
 import az.project.eracon.dto.response.MainImageResponse;
 import az.project.eracon.dto.response.ProjectResponse;
 import az.project.eracon.entity.ProjectEntity;
+import az.project.eracon.entity.ProjectPictureEntity;
 import az.project.eracon.exception.CustomException;
 import az.project.eracon.mapper.ProjectMapper;
+import az.project.eracon.repository.ProjectPictureRepository;
 import az.project.eracon.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import java.util.List;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final ProjectPictureRepository projectPictureRepository;
     private final FileService fileService;
 
     public ProjectResponse add(AddProjectRequest request) {
@@ -98,22 +101,57 @@ public class ProjectService {
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new CustomException("Layihə tapılmadı", "Project not found", "Not found", 404, null));
 
-        List<String> imagePaths = new ArrayList<>();
+        List<ProjectPictureEntity> newPictures = new ArrayList<>();
+
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> response = fileService.uploadFile(file);
-            imagePaths.add(response.getBody().getUuidName());
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+            String newFileName = uploaded.getBody().getUuidName();
+
+            ProjectPictureEntity picture = new ProjectPictureEntity();
+            picture.setFileName(newFileName);
+            picture.setProject(project);
+            newPictures.add(picture);
         }
 
-        List<String> existing = project.getAdditionalImages() != null
-                ? new ArrayList<>(project.getAdditionalImages())
-                : new ArrayList<>();
+        // Əgər ProjectEntity-də pictures sahəsi varsa (List<ProjectPictureEntity>)
+        project.getPictures().addAll(newPictures);
 
-        existing.addAll(imagePaths);
-        project.setAdditionalImages(existing);
         projectRepository.save(project);
 
         return ProjectMapper.convertToDTO(project);
     }
+    public ProjectResponse updateImage(Long pictureId, MultipartFile file) throws IOException {
+        ProjectPictureEntity picture = projectPictureRepository.findById(pictureId)
+                .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not found", 404, null));
+
+        String oldFileName = picture.getFileName();
+
+        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+        String newFileName = uploaded.getBody().getUuidName();
+
+        picture.setFileName(newFileName);
+
+        projectPictureRepository.save(picture);
+
+        fileService.deleteFile(oldFileName);
+
+        ProjectEntity project = picture.getProject();
+
+        return ProjectMapper.convertToDTO(project);
+    }
+    public void deletePicture(Long pictureId) {
+        ProjectPictureEntity picture = projectPictureRepository.findById(pictureId)
+                .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not found", 404, null));
+
+        try {
+            fileService.deleteFile(picture.getFileName()); // faylı diskdən sil
+        } catch (CustomException e) {
+            System.err.println("Failed to delete file: " + picture.getFileName() + " - " + e.getMessage());
+        }
+
+        projectPictureRepository.delete(picture); // DB-dən sil
+    }
+
 
 
 }
