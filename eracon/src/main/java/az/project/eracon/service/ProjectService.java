@@ -85,6 +85,7 @@ public class ProjectService {
         project.setMainImage(fileName);
         projectRepository.save(project);
 
+
         return ProjectMapper.convertToDTO(project);
     }
 
