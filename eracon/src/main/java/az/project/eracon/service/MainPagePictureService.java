@@ -32,16 +32,8 @@ public class MainPagePictureService {
     private final FileService fileService;
 
     public MediaResponse uploadPictures(MultipartFile[] files) throws IOException {
-        // Optional: delete all previous picture records (if only one allowed per user)
-        List<MainPagePictureEntity> existing = mainPagePictureRepository.findAll();
-        for (MainPagePictureEntity entity : existing) {
-            for (String url : entity.getMediaUrls()) {
-                fileService.deleteFile(url); // Implement this in your fileService
-            }
-            mainPagePictureRepository.delete(entity);
-        }
-
         List<String> uploadedUrls = new ArrayList<>();
+
         for (MultipartFile file : files) {
             ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
@@ -49,7 +41,6 @@ public class MainPagePictureService {
         }
 
         MainPagePictureEntity mediaEntity = new MainPagePictureEntity();
-        mainPagePictureRepository.save(mediaEntity);
         mediaEntity.setMediaUrls(uploadedUrls);
         mainPagePictureRepository.save(mediaEntity);
 
