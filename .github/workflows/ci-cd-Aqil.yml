@@ -51,4 +51,3 @@ jobs:
             docker stop eracon || true
             docker rm eracon || true
             docker run -d --name eracon -p 9990:9990 agilazizovf/eracon
-            docker run -d --restart unless-stopped --name eracon -p 9990:9990 agilazizovf/eracon
