@@ -1,6 +1,8 @@
 package az.project.eracon.service;
 
+import az.project.eracon.dto.request.AboutPictureRequest;
 import az.project.eracon.dto.request.AddAboutRequest;
+import az.project.eracon.dto.request.UpdateAboutPictureRequest;
 import az.project.eracon.dto.request.UpdateAboutRequest;
 import az.project.eracon.dto.response.AboutResponse;
 import az.project.eracon.dto.response.FileResponse;
@@ -32,7 +34,20 @@ public class AboutService {
 
     public AboutResponse add(AddAboutRequest request) {
         AboutEntity about = new AboutEntity();
-        mapper.map(request, about);
+        about.setTitle(request.getTitle());
+        about.setDescription(request.getDescription());
+
+        List<AboutPictureEntity> pictureEntities = new ArrayList<>();
+        if (request.getPictures() != null) {
+            for (AboutPictureRequest pictureRequest : request.getPictures()) {
+                AboutPictureEntity picture = new AboutPictureEntity();
+                picture.setFileName(pictureRequest.getUrl());
+                picture.setAbout(about); // set back-reference
+                pictureEntities.add(picture);
+            }
+        }
+
+        about.setPictures(pictureEntities);
         aboutRepository.save(about);
 
         return AboutMapper.convertToDTO(about);
@@ -54,7 +69,44 @@ public class AboutService {
         AboutEntity aboutEntity = aboutRepository.findById(request.getId())
                 .orElseThrow(() -> new CustomException("Məlumat tapılmadı", "Information not found", "Not found",
                         404, null));
-        mapper.map(request, aboutEntity);
+
+        aboutEntity.setTitle(request.getTitle());
+        aboutEntity.setDescription(request.getDescription());
+
+        // Handle pictures
+        List<AboutPictureEntity> updatedPictures = new ArrayList<>();
+        if (request.getPictures() != null) {
+            for (UpdateAboutPictureRequest picReq : request.getPictures()) {
+                AboutPictureEntity picture;
+                if (picReq.getId() != null) {
+                    // Update existing picture
+                    picture = aboutPictureRepository.findById(picReq.getId())
+                            .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not found", 404, null));
+                    picture.setFileName(picReq.getUrl());
+                } else {
+                    // Add new picture
+                    picture = new AboutPictureEntity();
+                    picture.setFileName(picReq.getUrl());
+                    picture.setAbout(aboutEntity);
+                }
+                updatedPictures.add(picture);
+            }
+        }
+
+        // Remove old pictures not in request
+        List<Long> incomingIds = request.getPictures() != null ?
+                request.getPictures().stream().map(UpdateAboutPictureRequest::getId).filter(id -> id != null).toList() :
+                new ArrayList<>();
+
+        List<AboutPictureEntity> picturesToRemove = aboutEntity.getPictures().stream()
+                .filter(existing -> existing.getId() != null && !incomingIds.contains(existing.getId()))
+                .toList();
+
+        picturesToRemove.forEach(aboutPictureRepository::delete); // optional: delete from DB
+
+        aboutEntity.getPictures().clear();
+        aboutEntity.getPictures().addAll(updatedPictures);
+
         aboutRepository.save(aboutEntity);
 
         return AboutMapper.convertToDTO(aboutEntity);

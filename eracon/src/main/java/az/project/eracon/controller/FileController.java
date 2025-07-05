@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -47,14 +49,18 @@ public class FileController {
     public ResponseEntity<Resource> streamVideo(@PathVariable String filename) {
         try {
             Resource videoFile = loadAsResource(filename);
+
+            String mimeType = Files.probeContentType(Path.of("your/path/" + filename));
+
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"") // not 'attachment'
-                    .header(HttpHeaders.CONTENT_TYPE, "video/mp4") // adjust if needed
+                    // no Content-Disposition
+                    .header(HttpHeaders.CONTENT_TYPE, mimeType != null ? mimeType : "video/mp4")
                     .body(videoFile);
-        } catch (RuntimeException ex) {
+        } catch (IOException | RuntimeException ex) {
             return ResponseEntity.status(404).body(null);
         }
     }
+
 
 
 

@@ -6,9 +6,8 @@ import java.util.List;
 
 @Data
 public class AboutResponse {
-
     private Long id;
     private String title;
     private String description;
-    private List<String> pictureUrls;
+    private List<AboutPictureResponse> pictures;
 }
