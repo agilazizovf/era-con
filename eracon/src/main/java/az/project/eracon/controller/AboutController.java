@@ -59,7 +59,7 @@ public class AboutController {
         return ResponseEntity.ok(aboutService.uploadPictures(id, files));
     }
 
-    @PutMapping(value = "/{pictureId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/update-picture/{pictureId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<AboutResponse> updatePicture(
             @PathVariable Long pictureId,
