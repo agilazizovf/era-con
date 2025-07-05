@@ -120,7 +120,7 @@ public class MediaService {
                 .map(PictureMapper::convertToDTO)
                 .toList();
     }
-    public List<MediaResponse> getAllVideos() {
+    public List<VideoResponse> getAllVideos() {
         return videoRepository.findAll().stream()
                 .map(VideoMapper::convertToDTO)
                 .toList();
@@ -136,7 +136,7 @@ public class MediaService {
                 .orElseThrow(() -> new CustomException("Şəkil tapılmadı", "Picture not found", "Not Found", 404, null));
         return PictureMapper.convertToDTO(picture);
     }
-    public MediaResponse getVideoById(Long id) {
+    public VideoResponse getVideoById(Long id) {
         VideoEntity video = videoRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Video tapılmadı", "Video not found", "Not Found", 404, null));
         return VideoMapper.convertToDTO(video);

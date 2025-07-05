@@ -49,7 +49,7 @@ public class MediaController {
         return ResponseEntity.ok(mediaService.getAllPictures());
     }
     @GetMapping("/videos")
-    public ResponseEntity<List<MediaResponse>> getAllVideos() {
+    public ResponseEntity<List<VideoResponse>> getAllVideos() {
         return ResponseEntity.ok(mediaService.getAllVideos());
     }
     @GetMapping("/documents")
@@ -64,7 +64,7 @@ public class MediaController {
     }
     @GetMapping("/video/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<MediaResponse> getVideoById(@PathVariable Long id) {
+    public ResponseEntity<VideoResponse> getVideoById(@PathVariable Long id) {
         return ResponseEntity.ok(mediaService.getVideoById(id));
     }
     @GetMapping("/document/{id}")
