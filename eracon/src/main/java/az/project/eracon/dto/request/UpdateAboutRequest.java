@@ -9,5 +9,5 @@ public class UpdateAboutRequest {
     private Long id;
     private String title;
     private String description;
-    private List<UpdateAboutPictureRequest> pictures;
+  //  private List<UpdateAboutPictureRequest> pictures;
 }

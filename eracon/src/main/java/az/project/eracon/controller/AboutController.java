@@ -51,11 +51,20 @@ public class AboutController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(value = "/{id}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public AboutResponse uploadPictures(
+    @PostMapping(value = "/{id}/pictures", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<List<AboutResponse>> uploadPictures(
             @PathVariable Long id,
-            @RequestParam("files") List<MultipartFile> files) throws IOException {
-        return aboutService.uploadPictures(id, files.toArray(new MultipartFile[0]));
+            @RequestPart("files") List<MultipartFile> files) throws IOException {
+        return ResponseEntity.ok(aboutService.uploadPictures(id, files));
+    }
+
+    @PutMapping(value = "/{pictureId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AboutResponse> updatePicture(
+            @PathVariable Long pictureId,
+            @RequestParam("file") MultipartFile file) throws IOException {
+
+        AboutResponse updatedAbout = aboutService.updatePicture(pictureId, file);
+        return ResponseEntity.ok(updatedAbout);
     }
 
     @DeleteMapping("/delete-picture/{pictureId}")

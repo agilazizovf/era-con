@@ -8,5 +8,5 @@ import java.util.List;
 public class AddAboutRequest {
     private String title;
     private String description;
-    private List<AboutPictureRequest> pictures;
+    //private List<AboutPictureRequest> pictures;
 }
