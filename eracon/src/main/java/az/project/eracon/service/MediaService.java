@@ -32,16 +32,8 @@ public class MediaService {
     private final FileService fileService;
 
     public MediaResponse uploadPictures(MultipartFile[] files) throws IOException {
-        // Optional: delete all previous picture records (if only one allowed per user)
-        List<PictureEntity> existing = pictureRepository.findAll();
-        for (PictureEntity entity : existing) {
-            for (String url : entity.getMediaUrls()) {
-                fileService.deleteFile(url); // Implement this in your fileService
-            }
-            pictureRepository.delete(entity);
-        }
-
         List<String> uploadedUrls = new ArrayList<>();
+
         for (MultipartFile file : files) {
             ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
@@ -54,6 +46,7 @@ public class MediaService {
 
         return PictureMapper.convertToDTO(mediaEntity);
     }
+
 
 
 
@@ -79,15 +72,8 @@ public class MediaService {
 
 
     public MediaResponse uploadDocuments(MultipartFile[] files) throws IOException {
-        List<DocumentEntity> existing = documentRepository.findAll();
-        for (DocumentEntity entity : existing) {
-            for (String url : entity.getMediaUrls()) {
-                fileService.deleteFile(url); // Implement delete in fileService
-            }
-            documentRepository.delete(entity);
-        }
-
         List<String> uploadedUrls = new ArrayList<>();
+
         for (MultipartFile file : files) {
             ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
@@ -100,6 +86,7 @@ public class MediaService {
 
         return DocumentMapper.convertToDTO(mediaEntity);
     }
+
 
 
 //    private MediaEntity uploadMedia(MultipartFile[] files) throws IOException {
