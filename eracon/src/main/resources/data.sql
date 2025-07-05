@@ -126,17 +126,6 @@ INSERT INTO projects (
              'main_image_2.jpg'
          );
 
--- Suppose project_id of the above insert is 1 (auto-incremented)
-INSERT INTO project_images (project_id, image_url) VALUES
-                                                       (1, 'img_1.jpg'),
-                                                       (1, 'img_2.jpg'),
-                                                       (1, 'img_3.jpg'),
-
-                                                       (2, 'img_4.jpg'),
-                                                       (2, 'img_5.jpg'),
-                                                       (2, 'img_6.jpg');
-
-
 
 insert into partners(picture_url, web_site_url)
 values ('picture1.png', 'https://www.site1.com/'),
