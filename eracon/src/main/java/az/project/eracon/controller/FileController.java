@@ -43,7 +43,7 @@ public class FileController {
             return ResponseEntity.status(404).body("Fayl tapılmadı: " + filename);
         }
     }
-    
+
 
     @GetMapping("/video/{filename:.+}")
     @ResponseBody
