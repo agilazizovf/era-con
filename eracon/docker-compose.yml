@@ -6,8 +6,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: eracon
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
+      # MYSQL_USER və MYSQL_PASSWORD silindi, çünki root üçün olmaz
     ports:
       - "3306:3306"
     volumes:
