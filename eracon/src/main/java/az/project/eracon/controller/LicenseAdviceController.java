@@ -18,7 +18,7 @@ public class LicenseAdviceController {
 
     private final LicenseAdviceService licenseAdviceService;
 
-    @PostMapping
+    @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TitleDescriptionResponse> add(@RequestBody AddTitleDescriptionRequest request) {
         TitleDescriptionResponse response = licenseAdviceService.add(request);
@@ -38,7 +38,7 @@ public class LicenseAdviceController {
         return ResponseEntity.ok(list);
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TitleDescriptionResponse> update(@RequestBody UpdateTitleDescriptionRequest request) {
         TitleDescriptionResponse response = licenseAdviceService.update(request);

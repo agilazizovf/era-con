@@ -18,7 +18,7 @@ public class ConstructionAuditController {
 
     private final ConstructionAuditService service;
 
-    @PostMapping
+    @PostMapping("/add")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TitleDescriptionResponse> add(@RequestBody AddTitleDescriptionRequest request) {
         return ResponseEntity.ok(service.add(request));
@@ -35,7 +35,7 @@ public class ConstructionAuditController {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @PutMapping
+    @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TitleDescriptionResponse> update(@RequestBody UpdateTitleDescriptionRequest request) {
         return ResponseEntity.ok(service.update(request));
