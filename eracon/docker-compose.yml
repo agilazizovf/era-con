@@ -16,7 +16,7 @@ services:
       - eracon-network
 
   eracon-app:
-    build: .
+    image: agilazizovf/eracon
     container_name: eracon-app
     ports:
       - "9990:9990"
