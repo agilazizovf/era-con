@@ -32,4 +32,5 @@ volumes:
 
 networks:
   eracon-network:
-    external: true
+    external:
+      name: app_eracon-network
