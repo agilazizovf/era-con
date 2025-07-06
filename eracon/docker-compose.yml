@@ -1,0 +1,37 @@
+version: '3'
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: eracon
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - eracon_mysql_data:/var/lib/mysql
+    networks:
+      - eracon-network
+
+  eracon-app:
+    build: .
+    container_name: eracon-app
+    ports:
+      - "9990:9990"
+    depends_on:
+      - mysql-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/eracon
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+    networks:
+      - eracon-network
+
+volumes:
+  eracon_mysql_data:
+
+networks:
+  eracon-network:
+    driver: bridge
