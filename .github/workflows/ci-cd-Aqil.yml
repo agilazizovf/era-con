@@ -47,7 +47,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /opt/eracon
+            cd /opt/app
             docker-compose pull
             docker-compose down
             docker-compose up -d
