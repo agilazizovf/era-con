@@ -88,7 +88,6 @@ public class ProjectService {
 
         return ProjectMapper.convertToDTO(project);
     }
-
     
     public MainImageResponse getMainImage(Long id) {
         ProjectEntity project = projectRepository.findById(id)
