@@ -89,6 +89,7 @@ public class ProjectService {
         return ProjectMapper.convertToDTO(project);
     }
 
+    
     public MainImageResponse getMainImage(Long id) {
         ProjectEntity project = projectRepository.findById(id)
                 .orElseThrow(() -> new CustomException("Layihə tapılmadı", "Project not found", "Not found", 404, null));
