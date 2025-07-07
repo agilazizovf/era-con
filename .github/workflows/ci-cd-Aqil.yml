@@ -48,4 +48,4 @@ jobs:
             docker pull agilazizovf/eracon
             docker stop eracon || true
             docker rm eracon || true
-            docker run -d --name eracon -p 9990:9990 agilazizovf/eracon
+            docker run -d --name eracon -p 9990:9990 -e SPRING_PROFILES_ACTIVE=dev agilazizovf/eracon

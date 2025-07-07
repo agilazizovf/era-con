@@ -24,6 +24,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/eracon
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_PROFILES_ACTIVE: prod
     networks:
       - eracon-network
 
