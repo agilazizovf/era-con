@@ -15,7 +15,7 @@ services:
 
   eracon-app:
     image: agilazizovf/eracon
-    container_name: eracon-app
+    container_name: eracon
     ports:
       - "9990:9990"
     depends_on:
