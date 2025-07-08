@@ -4,7 +4,7 @@ services:
     image: agilazizovf/eracon
     container_name: eracon
     ports:
-      - "9990:9990"
+      - "9991:9991"
     depends_on:
       - mysql
     environment:
