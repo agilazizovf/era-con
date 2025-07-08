@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: ${MYSQL_CONTAINER_NAME}
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - eracon_mysql_data:/var/lib/mysql
+    networks:
+      - eracon-network
+
+  eracon-app:
+    image: ${DOCKER_IMAGE}
+    container_name: ${APP_CONTAINER_NAME}
+    ports:
+      - "${APP_PORT}:9990"
+    depends_on:
+      - mysql-db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/${MYSQL_DATABASE}
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+    networks:
+      - eracon-network
+
+volumes:
+  eracon_mysql_data:
+
+networks:
+  eracon-network:
+    driver: bridge
