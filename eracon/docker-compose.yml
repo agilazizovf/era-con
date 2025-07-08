@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  eracon-app:
+    image: agilazizovf/eracon
+    container_name: eracon
+    ports:
+      - "9990:9990"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+
+  mysql:
+    image: mysql:8
+    container_name: eracon_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: eracon_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
