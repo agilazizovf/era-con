@@ -1,6 +1,6 @@
 version: "3.8"
 services:
-  eracon-app:
+  eracon:
     image: agilazizovf/eracon
     container_name: eracon
     ports:
