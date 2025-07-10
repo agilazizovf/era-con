@@ -30,6 +30,8 @@ public class AboutService {
     private final FileService fileService;
     private final ModelMapper mapper;
 
+    private final CloudinaryService cloudinaryService;
+
     public AboutResponse add(AddAboutRequest request) {
         AboutEntity about = new AboutEntity();
         mapper.map(request, about);
@@ -73,7 +75,7 @@ public class AboutService {
         List<AboutPictureEntity> newPictures = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+            ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
 
             AboutPictureEntity picture = new AboutPictureEntity();
@@ -98,7 +100,7 @@ public class AboutService {
         String oldFileName = picture.getFileName();
 
         // Yeni faylı upload et
-        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+        ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
         String newFileName = uploaded.getBody().getUuidName();
 
         // Şəkilin fayl adını yenilə

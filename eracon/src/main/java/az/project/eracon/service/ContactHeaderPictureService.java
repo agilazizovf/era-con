@@ -18,13 +18,14 @@ public class ContactHeaderPictureService {
 
     private final ContactHeaderPictureRepository repository;
     private final FileService fileService;
+    private final CloudinaryService cloudinaryService;
 
     public HeaderPictureResponse uploadPicture(MultipartFile picture) throws IOException {
         if (picture == null || picture.isEmpty()) {
             throw new CustomException("Şəkil boş ola bilməz", "Picture cannot be empty", "Bad Request", 400, null);
         }
 
-        ResponseEntity<FileResponse> uploadResponse = fileService.uploadFile(picture);
+        ResponseEntity<FileResponse> uploadResponse = cloudinaryService.uploadFile(picture);
         String pictureUrl = uploadResponse.getBody().getUuidName();
 
         repository.findTopByOrderByIdAsc().ifPresent(repository::delete);

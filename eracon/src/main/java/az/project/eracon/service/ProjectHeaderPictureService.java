@@ -18,6 +18,7 @@ public class ProjectHeaderPictureService {
 
     private final ProjectHeaderPictureRepository repository;
     private final FileService fileService;
+    private final CloudinaryService cloudinaryService;
 
     public HeaderPictureResponse uploadPicture(MultipartFile picture) throws IOException {
         if (picture == null || picture.isEmpty()) {
@@ -25,8 +26,8 @@ public class ProjectHeaderPictureService {
         }
 
         // Upload file using your FileService
-        ResponseEntity<FileResponse> uploadResponse = fileService.uploadFile(picture);
-        String pictureUrl = uploadResponse.getBody().getUuidName();
+        ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(picture);
+        String pictureUrl = uploaded.getBody().getUuidName();
 
         // Delete existing picture if any (assuming only one allowed)
         repository.findTopByOrderByIdAsc().ifPresent(repository::delete);

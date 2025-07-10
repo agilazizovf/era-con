@@ -17,6 +17,7 @@ import java.io.IOException;
 public class ServiceHeaderPictureService {
 
     private final ServiceHeaderPictureRepository repository;
+    private final CloudinaryService cloudinaryService;
     private final FileService fileService;
 
     public HeaderPictureResponse uploadPicture(MultipartFile picture) throws IOException {
@@ -24,7 +25,7 @@ public class ServiceHeaderPictureService {
             throw new CustomException("Şəkil boş ola bilməz", "Picture cannot be empty", "Bad Request", 400, null);
         }
 
-        ResponseEntity<FileResponse> uploadResponse = fileService.uploadFile(picture);
+        ResponseEntity<FileResponse> uploadResponse = cloudinaryService.uploadFile(picture);
         String pictureUrl = uploadResponse.getBody().getUuidName();
 
         repository.findTopByOrderByIdAsc().ifPresent(repository::delete);

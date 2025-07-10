@@ -23,6 +23,7 @@ public class PartnerService {
 
     private final PartnerRepository partnerRepository;
     private final FileService fileService;
+    private final CloudinaryService cloudinaryService;
 
     public PartnerResponse add(AddPartnerRequest request) {
         PartnerEntity partner = new PartnerEntity();
@@ -71,7 +72,7 @@ public class PartnerService {
         }
 
         // Upload new file
-        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
+        ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
         String newFileName = uploaded.getBody().getUuidName();
 
         partner.setPictureUrl(newFileName);
