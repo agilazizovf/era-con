@@ -36,14 +36,21 @@ public class FileController {
     public ResponseEntity<?> serveFile(@PathVariable String filename) {
         try {
             Resource file = loadAsResource(filename);
+            Path path = load(filename);
+
+            String mimeType = Files.probeContentType(path);
+            if (mimeType == null) {
+                mimeType = "application/octet-stream"; // default MIME
+            }
+
             return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_TYPE, mimeType)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
                     .body(file);
-        } catch (RuntimeException ex) {
+        } catch (IOException | RuntimeException ex) {
             return ResponseEntity.status(404).body("Fayl tapılmadı: " + filename);
         }
     }
-
 
     @GetMapping("/video/{filename:.+}")
     @ResponseBody
