@@ -18,7 +18,6 @@ public class CompanyHeaderPictureService {
 
     private final CompanyHeaderPictureRepository repository;
     private final FileService fileService;
-    private final CloudinaryService cloudinaryService;
 
     public HeaderPictureResponse uploadPicture(MultipartFile picture) throws IOException {
         if (picture == null || picture.isEmpty()) {
@@ -26,7 +25,7 @@ public class CompanyHeaderPictureService {
         }
 
         // Upload file via fileService (assuming it returns ResponseEntity<FileResponse>)
-        ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(picture);
+        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(picture);
         String pictureUrl = uploaded.getBody().getUuidName();
 
         // Delete previous picture if any

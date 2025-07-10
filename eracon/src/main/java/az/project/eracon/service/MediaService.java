@@ -30,13 +30,12 @@ public class MediaService {
     private final VideoRepository videoRepository;
     private final DocumentRepository documentRepository;
     private final FileService fileService;
-    private final CloudinaryService cloudinaryService;
 
     public MediaResponse uploadPictures(MultipartFile[] files) throws IOException {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
             uploadedUrls.add(newFileName);
         }
@@ -60,7 +59,7 @@ public class MediaService {
         }
 
         // Upload the new file
-        ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
+        ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
         String newFileName = uploaded.getBody().getUuidName();
 
         // Save new VideoEntity with single videoUrl
@@ -76,7 +75,7 @@ public class MediaService {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
             uploadedUrls.add(newFileName);
         }

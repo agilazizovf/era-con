@@ -31,13 +31,12 @@ public class MainPagePictureService {
     private final MainPagePictureRepository mainPagePictureRepository;
     private final FileService fileService;
 
-    private final CloudinaryService cloudinaryService;
 
     public MediaResponse uploadPictures(MultipartFile[] files) throws IOException {
         List<String> uploadedUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
             uploadedUrls.add(newFileName);
         }

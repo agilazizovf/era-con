@@ -27,7 +27,6 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final ProjectPictureRepository projectPictureRepository;
     private final FileService fileService;
-    private final CloudinaryService cloudinaryService;
 
     public ProjectResponse add(AddProjectRequest request) {
         ProjectEntity project = new ProjectEntity();
@@ -80,7 +79,7 @@ public class ProjectService {
         ProjectEntity project = projectRepository.findById(projectId)
                 .orElseThrow(() -> new CustomException("Layihə tapılmadı", "Project not found", "Not found", 404, null));
 
-        ResponseEntity<FileResponse> response = cloudinaryService.uploadFile(file);
+        ResponseEntity<FileResponse> response = fileService.uploadFile(file);
         String fileName = response.getBody().getUuidName();
 
         project.setMainImage(fileName);
@@ -106,7 +105,7 @@ public class ProjectService {
         List<ProjectPictureEntity> newPictures = new ArrayList<>();
 
         for (MultipartFile file : files) {
-            ResponseEntity<FileResponse> uploaded = cloudinaryService.uploadFile(file);
+            ResponseEntity<FileResponse> uploaded = fileService.uploadFile(file);
             String newFileName = uploaded.getBody().getUuidName();
 
             ProjectPictureEntity picture = new ProjectPictureEntity();
