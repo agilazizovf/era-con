@@ -37,7 +37,7 @@ public class FileController {
         try {
             Resource file = loadAsResource(filename);
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + filename + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
                     .body(file);
         } catch (RuntimeException ex) {
             return ResponseEntity.status(404).body("Fayl tapılmadı: " + filename);
