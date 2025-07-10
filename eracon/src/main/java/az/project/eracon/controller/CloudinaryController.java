@@ -1,5 +1,6 @@
 package az.project.eracon.controller;
 
+import az.project.eracon.dto.response.FileResponse;
 import az.project.eracon.service.CloudinaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,15 @@ public class CloudinaryController {
 
     @PostMapping("/upload")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<FileResponse> upload(@RequestParam("file") MultipartFile file) {
         try {
-            String url = cloudinaryService.uploadFile(file);
-            return ResponseEntity.ok(url);
+            ResponseEntity<FileResponse> url = cloudinaryService.uploadFile(file);
+            return url;
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Fayl yüklənmədi: " + e.getMessage());
+            FileResponse errorResponse = FileResponse.builder()
+                    .uuidName("Fayl yüklənmədi: " + e.getMessage())
+                    .build();
+            return ResponseEntity.status(500).body(errorResponse);
         }
     }
 }
